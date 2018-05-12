@@ -1,8 +1,9 @@
 'use strict'; 
 
+const express =require('express'); 
 const mongoose = require('mongoose'); 
 
-mongoose.Promise = global.promise;
+mongoose.Promise = global.Promise;
 
 const { PORT, DATABASE_URL } = require('./config'); 
 const { Blogposts } = require('./models'); 
@@ -60,8 +61,8 @@ app.post('/blog-posts', (req, res) => {
 
 	BlogPost
 		.create({
-			title: req.body.title
-			content: req.body.content
+			title: req.body.title,
+			content: req.body.content,
 			author: req.body.author
 		})
 		.then(blogPost => res.status(201).json(blogPost.serialize()))
@@ -73,7 +74,7 @@ app.post('/blog-posts', (req, res) => {
 
 //PUT Request 
 
-app.put('/blog-posts/:id' (req, res) => {
+app.put('/blog-posts/:id', (req, res) => {
 	if(!(req.params.id && req.body.id && req.params.id ===req.body.id)){
 		const message = (
 			`Request path id (${req.params.id}) and request body id ` +
@@ -136,16 +137,18 @@ function closeServer() {
 	return mongoose.disconnect().then(() => {
 		return new Promise((resolve, reject) => {
 			console.log('Closing server'); 
-			server.close(err) => {
+			server.close(err => {
 				if (err) {
 					return reject(err); 
 				}
 				resolve(); 
-			};
+			});
 		});
 	}); 
 }
 
 if (require.main === module) {
 	runServer(DATABASE_URL).catch(err => console.error(err)); 
-}; 
+} 
+
+module.exports = {app, runServer, closeServer}; 
