@@ -1,6 +1,7 @@
 'use strict'; 
 
 const mongoose = require('mongoose'); 
+mongoose.Promise = global.Promise 
 
 const blogPostSchema = mongoose.Schema({
 	title: {type: String, required: true}, 
@@ -30,4 +31,4 @@ blogPostSchema.methods.serialize = function () {
 
 const BlogPost = mongoose.model('BlogPost', blogPostSchema); 
 
-module.exports= {BlogPost}; 
+module.exports = {BlogPost}; 
